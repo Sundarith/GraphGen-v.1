@@ -1,0 +1,25 @@
+Feature: UCKG Neo4j integration for synthetic data generation
+
+This commit introduces a new workflow in `examples/generate/generate_uckg/`
+to bridge the Unified Cybersecurity Knowledge Graph (UCKG) with GraphGen.
+
+Changes:
+1. Added `import_uckg.py`:
+   - Connects to a local Neo4j instance.
+   - Imports nodes and relationships into GraphGen's KuzuDB storage.
+   - **Crucial Optimization**: Explicitly filters out 'embedding', 'vector',
+     and 'text_embedding' properties to prevent storage bloat, as these
+     are not needed for text-based generation.
+   - Synthesizes a 'description' field for entities from available properties
+     (name, summary, definition) to provide context for the LLM.
+
+2. Added `uckg_config.yaml`:
+   - Configures the GraphGen pipeline to bypass the extraction phase.
+   - Starts directly from 'partition' (using Leiden algorithm) and
+     'generate' (using CoT).
+
+3. Added `generate_uckg.sh`:
+   - Orchestration script to run the import and generation steps.
+
+4. Added `README.md`:
+   - Documentation for the new workflow.
