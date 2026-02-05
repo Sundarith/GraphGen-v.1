@@ -1,0 +1,112 @@
+import json
+import argparse
+import logging
+import os
+from graphgen.models.storage.graph.kuzu_storage import KuzuStorage
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+def get_description(props, label):
+    """Heuristic to generate a description string."""
+    desc_keys = ['description', 'summary', 'definition', 'note', 'desc', 'ucoexDescription', 'ucoexExample', 'ucocweSummary', 'ucocweExtendedSummary']
+    name_keys = ['name', 'title', 'id', 'label', 'ucoexNAME', 'ucocweName', 'ucoexCAPEC_name']
+    
+    name = next((str(props[k]) for k in name_keys if k in props), f"Entity ({label})")
+    
+    # Combine all found descriptions
+    descriptions = [str(props[k]) for k in desc_keys if k in props and props[k]]
+    full_desc = ". ".join(descriptions)
+    
+    if full_desc:
+        return f"{name}: {full_desc}"
+    return name
+
+def load_data(input_file, working_dir):
+    logger.info(f"Initializing KuzuDB at {working_dir}/graph_kuzu")
+    os.makedirs(working_dir, exist_ok=True)
+    kuzu_storage = KuzuStorage(working_dir=working_dir, namespace="graph")
+    
+    # Optional: Clear existing data
+    # kuzu_storage.clear() 
+    
+    logger.info(f"Loading data from {input_file}...")
+    
+    count = 0
+    nodes_seen = set()
+    
+    with open(input_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            row = json.loads(line)
+            
+            # --- Load Nodes ---
+            # CAPEC
+            c_id = row["c_id"]
+            if c_id not in nodes_seen:
+                data = {
+                    "entity_type": "UcoexCAPEC",
+                    "description": get_description(row["c"], "UcoexCAPEC"),
+                    "source_id": "uckg_neo4j",
+                    **row["c"]
+                }
+                kuzu_storage.upsert_node(c_id, data)
+                nodes_seen.add(c_id)
+                
+            # ATT&CK
+            a_id = row["a_id"]
+            if a_id not in nodes_seen:
+                data = {
+                    "entity_type": "UcoexMITREATTACK",
+                    "description": get_description(row["a"], "UcoexMITREATTACK"),
+                    "source_id": "uckg_neo4j",
+                    **row["a"]
+                }
+                kuzu_storage.upsert_node(a_id, data)
+                nodes_seen.add(a_id)
+                
+            # Mitigation
+            m_id = row["m_id"]
+            if m_id not in nodes_seen:
+                data = {
+                    "entity_type": "UcoexMITIGATIONS",
+                    "description": get_description(row["m"], "UcoexMITIGATIONS"),
+                    "source_id": "uckg_neo4j",
+                    **row["m"]
+                }
+                kuzu_storage.upsert_node(m_id, data)
+                nodes_seen.add(m_id)
+                
+            # --- Load Relationships ---
+            # CAPEC -> ATT&CK
+            r1 = row["r1"]
+            r1_data = {
+                "relation_type": r1["type"],
+                "description": r1["type"],
+                "source_id": "uckg_neo4j",
+                **r1.get("props", {})
+            }
+            kuzu_storage.upsert_edge(r1["start"], r1["end"], r1_data)
+            
+            # Mitigation -> ATT&CK
+            r2 = row["r2"]
+            r2_data = {
+                "relation_type": r2["type"],
+                "description": r2["type"],
+                "source_id": "uckg_neo4j",
+                **r2.get("props", {})
+            }
+            kuzu_storage.upsert_edge(r2["start"], r2["end"], r2_data)
+            
+            count += 1
+            if count % 100 == 0:
+                logger.info(f"Loaded {count} paths...")
+                
+    logger.info(f"Finished loading. Processed {count} paths.")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Load Clean UCKG Data to GraphGen")
+    parser.add_argument("--input", default="examples/generate/generate_uckg/clean_data.jsonl")
+    parser.add_argument("--dir", default="cache")
+    args = parser.parse_args()
+    
+    load_data(args.input, args.dir)
