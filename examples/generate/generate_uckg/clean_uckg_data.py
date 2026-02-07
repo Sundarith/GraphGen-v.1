@@ -16,7 +16,7 @@ def parse_messy_uckg_field(value):
         # Handling the specific format: key=[ ... ]}
         match = re.search(r'=\[(.*)\]\}?$', value)
         if match:
-            inner_json = f"[{match.group(1)}]")
+            inner_json = f"[{match.group(1)}]"
             data = json.loads(inner_json)
             
             text_lines = []
@@ -32,21 +32,19 @@ def parse_messy_uckg_field(value):
     return value
 
 def clean_dict(d):
-    """Recursively clean dictionary: remove embeddings, parse messy fields."""
+    """Recursively clean dictionary: parse messy fields."""
     cleaned = {}
-    excluded_keys = {'embedding', 'embeddings', 'vector', 'vectors', 'text_embedding'}
     messy_fields = {'ucopotentialMitigations', 'ucodetectionMethods', 'ucocommonConsequences', 'ucomodesOfIntroduction'}
 
     for k, v in d.items():
-        if k in excluded_keys:
-            continue
-        
-        # Heuristic for embeddings (long list of floats)
-        if isinstance(v, list) and len(v) > 10 and isinstance(v[0], float):
-            continue
-            
         if k in messy_fields and isinstance(v, str):
             cleaned[k] = parse_messy_uckg_field(v)
+        elif isinstance(v, str) and " | " in v:
+            # Polish specific formatting like "STEP... | TECHNIQUE..." -> "STEP...\n  - TECHNIQUE..."
+            cleaned[k] = v.replace(" | ", "\n  - ")
+        elif isinstance(v, list) and all(isinstance(x, str) for x in v):
+             # Also polish lists of strings if they contain pipes
+             cleaned[k] = [x.replace(" | ", "\n  - ") for x in v]
         else:
             cleaned[k] = v
     return cleaned
@@ -82,7 +80,7 @@ def clean_data(input_file, output_file):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Clean Raw UCKG Data")
-    parser.add_argument("--input", default="examples/generate/generate_uckg/raw_data.jsonl")
+    parser.add_argument("--input", default="examples/generate/generate_uckg/filtered_data.jsonl")
     parser.add_argument("--output", default="examples/generate/generate_uckg/clean_data.jsonl")
     args = parser.parse_args()
     

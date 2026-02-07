@@ -1,51 +1,79 @@
 # UCKG Synthetic Data Generation Integration
 
-This directory contains the integration workflow for generating synthetic Q&A data using the **Unified Cybersecurity Knowledge Graph (UCKG)** as the source.
+This directory contains the integration workflow for generating synthetic Q&A data using the **Unified Cybersecurity Knowledge Graph (UCKG)**.
 
 ## Overview
 
-Unlike standard GraphGen workflows that extract entities from raw text, this workflow leverages the existing, high-quality knowledge graph stored in UCKG's Neo4j database. It bridges the gap between Neo4j and GraphGen's internal KuzuDB storage to enable advanced synthetic data generation (e.g., Chain-of-Thought, Multi-hop QA).
+This workflow extracts specific **"Incident Response" knowledge triads** from Neo4j, cleans them, and feeds them into GraphGen to generate high-quality Q&A pairs for training a cybersecurity assistant.
 
-### Workflow Architecture
+### The Knowledge Chain
+We specifically target this V-shape relationship structure:
+`[Symptom: CAPEC] --(maps to)--> [Category: ATT&CK] <--(mitigates)-- [Solution: MITIGATION]`
 
-1.  **Bridge (Import):** Connects to the local UCKG Neo4j instance, reads nodes and relationships, and imports them into GraphGen's internal KuzuDB storage.
-    *   *Optimization:* Automatically filters out high-dimensional embedding vectors to keep the cache lightweight.
-    *   *Context:* Synthesizes a "description" field for each entity by combining `name`, `summary`, and `definition` properties, which is crucial for the LLM's context.
-2.  **Partition:** Uses the Leiden community detection algorithm to group related cybersecurity entities into communities.
-3.  **Generate:** Feeds these communities to the `CoTGenerator` (Chain-of-Thought) to produce high-quality Q&A pairs.
+*   **CAPEC:** User-facing symptoms ("My server is flooded").
+*   **ATT&CK:** Technical category ("Denial of Service").
+*   **MITIGATION:** Actionable solution ("Rate Limiting").
+
+### Workflow Architecture (ETL Pipeline)
+
+1.  **Extract (`extract_uckg_raw.py`):** Queries Neo4j for the specific triads. Dumps raw JSONL.
+2.  **Filter (`filter_uckg_data.py`):** Whitelists only relevant properties (Name, Description, Example) to reduce noise.
+3.  **Clean (`clean_uckg_data.py`):**
+    *   Parses messy JSON strings (e.g., `{mitigation=[...]}`).
+    *   Polishes formatting (`|` separators -> bullet points).
+    *   Removes embedding vectors.
+4.  **Load (`load_to_graphgen.py`):** Reconstructs the graph in GraphGen's internal KuzuDB storage.
+5.  **Generate (`graphgen.run`):** Uses LLM to synthesize Q&A pairs from the curated graph.
 
 ## File Structure
 
-*   `import_uckg.py`: The bridge script. Connects to Neo4j via the Bolt driver, cleans properties (removing embeddings), and populates the KuzuDB.
-*   `uckg_config.yaml`: GraphGen pipeline configuration. It defines the `partition` and `generate` steps, skipping the usual extraction phase.
-*   `generate_uckg.sh`: The master execution script. Runs the import followed by the generation pipeline.
-*   `dummy.txt`: A placeholder file required to initialize the GraphGen source operator.
+*   **Scripts:**
+    *   `extract_uckg_raw.py`: Neo4j -> `raw_data.jsonl`
+    *   `filter_uckg_data.py`: `raw` -> `filtered_data.jsonl`
+    *   `clean_uckg_data.py`: `filtered` -> `clean_data.jsonl`
+    *   `load_to_graphgen.py`: `clean` -> KuzuDB
+    *   `inspect_kuzu.py`: Verifies KuzuDB content and chain connectivity.
+*   **Config:**
+    *   `uckg_config.yaml`: Pipeline config (set to `atomic` generation).
+*   **Orchestration:**
+    *   `generate_uckg.sh`: Master script to run all steps.
 
 ## Usage
 
 ### Prerequisites
-Ensure the UCKG Neo4j database is running and accessible.
-```bash
-# Install dependencies
-pip install neo4j kuzu
-```
+1.  **Environment:** `conda activate graphgen`
+2.  **Dependencies:** `pip install -r requirements.txt`
+3.  **Neo4j:** Running at `localhost:7687`
+4.  **LLM:** `SYNTHESIZER_API_KEY` set in `.env`.
 
-### Running the Pipeline
-Execute the shell script to start the import and generation process:
-
+### Running the Full Pipeline
 ```bash
 bash examples/generate/generate_uckg/generate_uckg.sh
 ```
 
-**Note:** By default, the script imports **all** nodes from Neo4j. To test with a smaller subset, you can modify `generate_uckg.sh` to add the `--limit` flag:
+### Manual Verification
+You can inspect the internal database state to verify connectivity:
 ```bash
-python3 examples/generate/generate_uckg/import_uckg.py --dir cache --limit 1000
+python3 examples/generate/generate_uckg/inspect_kuzu.py
 ```
+*Look for "[SUCCESS] Chain Found" in the output.*
 
-## Research Notes regarding Embeddings
+### Step-by-Step Debugging
+If you need to debug a specific stage:
 
-The UCKG Neo4j database contains pre-computed embedding vectors for semantic search. This integration workflow **explicitly excludes** these vectors during the import phase (`clean_properties` function in `import_uckg.py`).
+```bash
+# 1. Extract
+python3 examples/generate/generate_uckg/extract_uckg_raw.py --limit 1000
 
-**Reasoning:**
-1.  **Storage Efficiency:** Storing thousands of high-dimensional float vectors in the intermediate KuzuDB cache would significantly bloat file size and slow down I/O.
-2.  **Relevance:** The generation phase relies on textual metadata (descriptions, names, types) to prompt the LLM. The raw vectors are not interpretable by the LLM in this context and are thus unnecessary for synthetic text generation.
+# 2. Filter
+python3 examples/generate/generate_uckg/filter_uckg_data.py
+
+# 3. Clean
+python3 examples/generate/generate_uckg/clean_uckg_data.py
+
+# 4. Load (Set PYTHONPATH for imports)
+PYTHONPATH=. python3 examples/generate/generate_uckg/load_to_graphgen.py --dir cache
+
+# 5. Generate
+python3 -m graphgen.run --config_file examples/generate/generate_uckg/uckg_config.yaml
+```

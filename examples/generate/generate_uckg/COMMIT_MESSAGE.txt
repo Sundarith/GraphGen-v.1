@@ -1,25 +1,24 @@
-Feature: UCKG Neo4j integration for synthetic data generation
+feat(uckg): add ETL pipeline for Incident Response training data
 
-This commit introduces a new workflow in `examples/generate/generate_uckg/`
-to bridge the Unified Cybersecurity Knowledge Graph (UCKG) with GraphGen.
+This commit introduces a curated data generation pipeline that bridges
+the Unified Cybersecurity Knowledge Graph (UCKG) with GraphGen.
 
-Changes:
-1. Added `import_uckg.py`:
-   - Connects to a local Neo4j instance.
-   - Imports nodes and relationships into GraphGen's KuzuDB storage.
-   - **Crucial Optimization**: Explicitly filters out 'embedding', 'vector',
-     and 'text_embedding' properties to prevent storage bloat, as these
-     are not needed for text-based generation.
-   - Synthesizes a 'description' field for entities from available properties
-     (name, summary, definition) to provide context for the LLM.
+The goal is to generate "Incident Response" Q&A pairs (Symptom -> Solution).
 
-2. Added `uckg_config.yaml`:
-   - Configures the GraphGen pipeline to bypass the extraction phase.
-   - Starts directly from 'partition' (using Leiden algorithm) and
-     'generate' (using CoT).
+Architecture Changes:
+1. **Targeted Extraction**:
+   - `extract_uckg_raw.py`: Queries Neo4j for specific triads:
+     `CAPEC (Symptom) <-> ATT&CK (Category) <-> MITIGATION (Solution)`.
+   - Ignores irrelevant nodes to keep the dataset focused.
 
-3. Added `generate_uckg.sh`:
-   - Orchestration script to run the import and generation steps.
+2. **Data Cleaning & filtering**:
+   - `filter_uckg_data.py`: Whitelists high-value properties (Description, Example, Technique) and discards metadata.
+   - `clean_uckg_data.py`: Parses nested JSON-string properties from UCKG and polishes text formatting (e.g., bullets).
 
-4. Added `README.md`:
-   - Documentation for the new workflow.
+3. **GraphGen Integration**:
+   - `load_to_graphgen.py`: Reconstructs the cleaned triads into GraphGen's internal KuzuDB storage.
+   - `uckg_config.yaml`: Configured for 'atomic' generation to create rich, node-centric Q&A.
+
+4. **Orchestration**:
+   - `generate_uckg.sh`: Master script to run the full pipeline.
+   - `inspect_kuzu.py`: Verification tool to prove graph connectivity.
