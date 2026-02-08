@@ -79,9 +79,14 @@ def load_data(input_file, working_dir):
             # --- Load Relationships ---
             # CAPEC -> ATT&CK
             r1 = row["r1"]
+            r1_type = r1["type"]
+            # Polish Relationship Names for LLM readability
+            if r1_type == "UCOEXHASTAXONOMYMAPPING":
+                r1_type = "IS_A"
+            
             r1_data = {
-                "relation_type": r1["type"],
-                "description": r1["type"],
+                "relation_type": r1_type,
+                "description": r1_type,
                 "source_id": "uckg_neo4j",
                 **r1.get("props", {})
             }
@@ -89,9 +94,13 @@ def load_data(input_file, working_dir):
             
             # Mitigation -> ATT&CK
             r2 = row["r2"]
+            r2_type = r2["type"]
+            if r2_type == "UCOEXMITIGATES":
+                r2_type = "MITIGATES"
+
             r2_data = {
-                "relation_type": r2["type"],
-                "description": r2["type"],
+                "relation_type": r2_type,
+                "description": r2_type,
                 "source_id": "uckg_neo4j",
                 **r2.get("props", {})
             }
