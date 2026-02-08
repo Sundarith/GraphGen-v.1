@@ -8,11 +8,13 @@ This workflow extracts specific **"Incident Response" knowledge triads** from Ne
 
 ### The Knowledge Chain
 We specifically target this V-shape relationship structure:
-`[Symptom: CAPEC] --(maps to)--> [Category: ATT&CK] <--(mitigates)-- [Solution: MITIGATION]`
+`[Symptom: CAPEC] --[IS_A]--> [Category: ATT&CK] <--(MITIGATES)-- [Solution: MITIGATION]`
 
 *   **CAPEC:** User-facing symptoms ("My server is flooded").
 *   **ATT&CK:** Technical category ("Denial of Service").
 *   **MITIGATION:** Actionable solution ("Rate Limiting").
+
+*Note: Relationships are renamed from `UCOEXHASTAXONOMYMAPPING` and `UCOEXMITIGATES` to `IS_A` and `MITIGATES` during the load step for better LLM comprehension.*
 
 ### Workflow Architecture (ETL Pipeline)
 
@@ -21,8 +23,7 @@ We specifically target this V-shape relationship structure:
 3.  **Clean (`clean_uckg_data.py`):**
     *   Parses messy JSON strings (e.g., `{mitigation=[...]}`).
     *   Polishes formatting (`|` separators -> bullet points).
-    *   Removes embedding vectors.
-4.  **Load (`load_to_graphgen.py`):** Reconstructs the graph in GraphGen's internal KuzuDB storage.
+4.  **Load (`load_to_graphgen.py`):** Reconstructs the graph in GraphGen's internal KuzuDB storage and applies semantic renaming.
 5.  **Generate (`graphgen.run`):** Uses LLM to synthesize Q&A pairs from the curated graph.
 
 ## File Structure
@@ -34,7 +35,7 @@ We specifically target this V-shape relationship structure:
     *   `load_to_graphgen.py`: `clean` -> KuzuDB
     *   `inspect_kuzu.py`: Verifies KuzuDB content and chain connectivity.
 *   **Config:**
-    *   `uckg_config.yaml`: Pipeline config (set to `atomic` generation).
+    *   `uckg_config.yaml`: GraphGen pipeline configuration (Atomic mode).
 *   **Orchestration:**
     *   `generate_uckg.sh`: Master script to run all steps.
 
@@ -56,7 +57,11 @@ You can inspect the internal database state to verify connectivity:
 ```bash
 python3 examples/generate/generate_uckg/inspect_kuzu.py
 ```
-*Look for "[SUCCESS] Chain Found" in the output.*
+**Expected Output:**
+```text
+[SUCCESS] Chain Found:
+Chain: [CAPEC: ...] --[IS_A]--> [ATT&CK: ...] <--(MITIGATES)-- [MITIGATION: ...]
+```
 
 ### Step-by-Step Debugging
 If you need to debug a specific stage:
