@@ -93,7 +93,7 @@ def inspect_kuzu():
             m_data = json.loads(row[2])
             
             print("[SUCCESS] Chain Found:")
-            print(f"Chain: [CAPEC: {c_data.get('ucoexCAPEC_name')}] --[IS_A]--> [ATT&CK: {a_data.get('ucoexNAME')}] <--(MITIGATES)-- [MITIGATION: {m_data.get('ucoexNAME')}]")
+            print(f"Chain: [CAPEC: {c_data.get('Name')}] --[IS_A]--> [ATT&CK: {a_data.get('Name')}] <--(MITIGATES)-- [MITIGATION: {m_data.get('Name')}]")
         else:
             print("[FAILURE] No complete CAPEC -> ATT&CK <- MITIGATION chain found.")
 

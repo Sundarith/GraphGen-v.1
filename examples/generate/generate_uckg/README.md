@@ -14,16 +14,15 @@ We specifically target this V-shape relationship structure:
 *   **ATT&CK:** Technical category ("Denial of Service").
 *   **MITIGATION:** Actionable solution ("Rate Limiting").
 
-*Note: Relationships are renamed from `UCOEXHASTAXONOMYMAPPING` and `UCOEXMITIGATES` to `IS_A` and `MITIGATES` during the load step for better LLM comprehension.*
-
 ### Workflow Architecture (ETL Pipeline)
 
 1.  **Extract (`extract_uckg_raw.py`):** Queries Neo4j for the specific triads. Dumps raw JSONL.
 2.  **Filter (`filter_uckg_data.py`):** Whitelists only relevant properties (Name, Description, Example) to reduce noise.
 3.  **Clean (`clean_uckg_data.py`):**
     *   Parses messy JSON strings (e.g., `{mitigation=[...]}`).
+    *   **Renames Keys:** Standardizes `ucoexNAME` -> `Name`, `ucoexDescription` -> `Description` for clearer LLM prompts.
     *   Polishes formatting (`|` separators -> bullet points).
-4.  **Load (`load_to_graphgen.py`):** Reconstructs the graph in GraphGen's internal KuzuDB storage and applies semantic renaming.
+4.  **Load (`load_to_graphgen.py`):** Reconstructs the graph in GraphGen's internal KuzuDB storage and applies semantic renaming (`IS_A`, `MITIGATES`).
 5.  **Generate (`graphgen.run`):** Uses LLM to synthesize Q&A pairs from the curated graph.
 
 ## File Structure
@@ -60,7 +59,7 @@ python3 examples/generate/generate_uckg/inspect_kuzu.py
 **Expected Output:**
 ```text
 [SUCCESS] Chain Found:
-Chain: [CAPEC: ...] --[IS_A]--> [ATT&CK: ...] <--(MITIGATES)-- [MITIGATION: ...]
+Chain: [CAPEC: Collect Data...] --[IS_A]--> [ATT&CK: Data from...] <--(MITIGATES)-- [MITIGATION: Filter...]
 ```
 
 ### Step-by-Step Debugging
@@ -77,6 +76,7 @@ python3 examples/generate/generate_uckg/filter_uckg_data.py
 python3 examples/generate/generate_uckg/clean_uckg_data.py
 
 # 4. Load (Set PYTHONPATH for imports)
+# (Recommended: rm -rf cache/graph_kuzu first)
 PYTHONPATH=. python3 examples/generate/generate_uckg/load_to_graphgen.py --dir cache
 
 # 5. Generate

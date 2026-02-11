@@ -33,20 +33,37 @@ def parse_messy_uckg_field(value):
 
 def clean_dict(d):
     """Recursively clean dictionary: parse messy fields."""
+    
+    # Key Renaming Map
+    key_map = {
+        "ucoexCAPEC_name": "Name",
+        "ucoexNAME": "Name",
+        "ucoexDescription": "Description",
+        "ucoexDESCRIPTION": "Description",
+        "ucoexMitigations": "Mitigations",
+        "ucopotentialMitigations": "Mitigations",
+        "ucoexExample": "Example",
+        "ucoexPrerequisites": "Prerequisites",
+        "ucoexExecutionFlowTechnique": "Technique",
+        "ucoexConsequences": "Consequences"
+    }
+
     cleaned = {}
     messy_fields = {'ucopotentialMitigations', 'ucodetectionMethods', 'ucocommonConsequences', 'ucomodesOfIntroduction'}
 
     for k, v in d.items():
+        # ... logic ...
+        
+        new_key = key_map.get(k, k) # Rename if in map, else keep original
+        
         if k in messy_fields and isinstance(v, str):
-            cleaned[k] = parse_messy_uckg_field(v)
+            cleaned[new_key] = parse_messy_uckg_field(v)
         elif isinstance(v, str) and " | " in v:
-            # Polish specific formatting like "STEP... | TECHNIQUE..." -> "STEP...\n  - TECHNIQUE..."
-            cleaned[k] = v.replace(" | ", "\n  - ")
+            cleaned[new_key] = v.replace(" | ", "\n  - ")
         elif isinstance(v, list) and all(isinstance(x, str) for x in v):
-             # Also polish lists of strings if they contain pipes
-             cleaned[k] = [x.replace(" | ", "\n  - ") for x in v]
+             cleaned[new_key] = [x.replace(" | ", "\n  - ") for x in v]
         else:
-            cleaned[k] = v
+            cleaned[new_key] = v
     return cleaned
 
 def clean_data(input_file, output_file):
