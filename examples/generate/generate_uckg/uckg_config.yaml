@@ -17,6 +17,7 @@ nodes:
     type: aggregate
     dependencies:
       - start_trigger
+    save_output: true
     params:
       method: leiden
       method_params:
