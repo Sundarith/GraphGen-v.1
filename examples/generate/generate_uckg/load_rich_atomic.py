@@ -8,18 +8,42 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def get_description(props, label):
-    """Heuristic to generate a description string."""
-    desc_keys = ['description', 'summary', 'definition', 'note', 'desc', 'ucoexDescription', 'ucoexExample', 'ucocweSummary', 'ucocweExtendedSummary']
-    name_keys = ['name', 'title', 'id', 'label', 'ucoexNAME', 'ucocweName', 'ucoexCAPEC_name']
-    
+    """Heuristic to generate a description string with rich context."""
+    name_keys = ['Name', 'name', 'title', 'id', 'label', 'ucoexNAME', 'ucoexCAPEC_name']
     name = next((str(props[k]) for k in name_keys if k in props), f"Entity ({label})")
     
-    # Combine all found descriptions
-    descriptions = [str(props[k]) for k in desc_keys if k in props and props[k]]
-    full_desc = ". ".join(descriptions)
+    lines = []
+    # 1. Main Description
+    # Check simplified keys first, then original keys
+    desc_val = props.get('Description') or props.get('ucoexDescription') or props.get('ucoexDESCRIPTION')
+    if desc_val:
+        lines.append(f"Description: {desc_val}")
+
+    # 2. Rich Context Fields
+    # Map of Display Header -> Property Key(s) to check
+    rich_fields = {
+        "Mitigations": ["Mitigations", "ucoexMitigations", "ucopotentialMitigations"],
+        "Technique Steps": ["Technique", "ucoexExecutionFlowTechnique"],
+        "Prerequisites": ["Prerequisites", "ucoexPrerequisites"],
+        "Example": ["Example", "ucoexExample"],
+        "Consequences": ["Consequences", "ucoexConsequences"]
+    }
+
+    for header, keys in rich_fields.items():
+        # Find the first key that exists
+        val = next((props[k] for k in keys if k in props and props[k]), None)
+        if val:
+            if isinstance(val, list):
+                # Join list items with bullets
+                val_str = "\n- ".join(str(x) for x in val)
+                lines.append(f"{header}:\n- {val_str}")
+            else:
+                lines.append(f"{header}: {val}")
+
+    full_desc = "\n\n".join(lines)
     
     if full_desc:
-        return f"{name}: {full_desc}"
+        return f"{name}\n\n{full_desc}"
     return name
 
 def load_data(input_file, working_dir):
