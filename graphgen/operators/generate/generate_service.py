@@ -37,6 +37,14 @@ class GenerateService(BaseOperator):
             from graphgen.models import MultiHopGenerator
 
             self.generator = MultiHopGenerator(self.llm_client)
+        elif self.method == "multi_hop_uckg":
+            from graphgen.models import MultiHopGeneratorUCKG
+
+            self.generator = MultiHopGeneratorUCKG(self.llm_client)
+        elif self.method == "multi_hop_cyber":
+            from graphgen.models import MultiHopCyberGenerator
+
+            self.generator = MultiHopCyberGenerator(self.llm_client)
         elif self.method == "cot":
             from graphgen.models import CoTGenerator
 

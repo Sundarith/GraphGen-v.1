@@ -1,0 +1,34 @@
+global_params:
+  working_dir: cache
+  graph_backend: kuzu
+  kv_backend: rocksdb
+
+nodes:
+  - id: read
+    op_name: read
+    type: source
+    dependencies: []
+    params:
+      input_path:
+       - examples/generate/generate_uckg/uckg_cpe_text_dump_test.jsonl
+
+  - id: chunk
+    op_name: chunk
+    type: map_batch
+    dependencies:
+      - read
+    execution_params:
+      replicas: 2
+    params:
+      chunk_size: 1024
+      chunk_overlap: 100
+
+  - id: build_kg
+    op_name: build_kg
+    type: map_batch
+    dependencies:
+      - chunk
+    execution_params:
+      replicas: 1
+      batch_size: 32
+    save_output: true

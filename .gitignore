@@ -181,3 +181,14 @@ cache
 # macOS
 .DS_Store
 **/.DS_Store
+
+# Local caches (regeneratable, do not commit)
+cache_gemini_backup/
+cache_test/
+cache/
+
+# Nested repos / external exports (not part of this project's history)
+UCKG 13-08-13-066/
+
+# Large binary artifacts
+*.jar

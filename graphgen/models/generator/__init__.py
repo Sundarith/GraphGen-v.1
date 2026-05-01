@@ -5,6 +5,8 @@ from .fill_in_blank_generator import FillInBlankGenerator
 from .multi_answer_generator import MultiAnswerGenerator
 from .multi_choice_generator import MultiChoiceGenerator
 from .multi_hop_generator import MultiHopGenerator
+from .multi_hop_cyber_generator import MultiHopCyberGenerator
+from .multi_hop_generator_uckg import MultiHopGeneratorUCKG
 from .quiz_generator import QuizGenerator
 from .true_false_generator import TrueFalseGenerator
 from .vqa_generator import VQAGenerator

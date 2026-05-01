@@ -1,8 +1,8 @@
 # pylint: disable=C0301
-TEMPLATE_EN: str = """You are an NLP expert, skilled at analyzing text to extract named entities and their relationships.
+TEMPLATE_EN: str = """You are an Expert Cybersecurity Analyst and Threat Intelligence Engineer, skilled at analyzing complex incident reports to extract critical threat_actors, attack_patterns, attack_techniques, mitigations, vulnerabilities, weaknesses, and tool_or_malware.
 
 -Goal-
-Given a text document that is potentially relevant to this activity and a list of entity types, identify all entities of those types from the text and all relationships among the identified entities.
+Given a threat intelligence document and a list of entity types, identify all entities of those types from the text and all relationships among the identified entities.
 Use English as output language.
 
 -Steps-
@@ -32,43 +32,22 @@ Format the content-level key words as ("content_keywords"{tuple_delimiter}<high_
 -Example 1-
 Text:
 ################
-In the second century of the Christian Era, the empire of Rome comprehended the fairest part of the earth, and the most civilized portion of mankind. The frontiers of that extensive monarchy were guarded by ancient renown and disciplined valor. The gentle but powerful influence of laws and manners had gradually cemented the union of the provinces. Their peaceful inhabitants enjoyed and abused the advantages of wealth and luxury. The image of a free constitution was preserved with decent reverence: the Roman senate appeared to possess the sovereign authority, and devolved on the emperors all the executive powers of government. During a happy period of more than fourscore years, the public administration was conducted by the virtue and abilities of Nerva, Trajan, Hadrian, and the two Antonines.
+Incident Report: BlueSmacking
+Attack Summary: An adversary uses Bluetooth flooding to transfer large packets to Bluetooth enabled devices over the L2CAP protocol with the goal of creating a DoS. 
+Tactical Mitigation: Disable Bluetooth when not being used.
 ################
 Output:
-("entity"{tuple_delimiter}"Roman Empire"{tuple_delimiter}"organization"{tuple_delimiter}"The dominant empire of the second century CE, encompassing the most developed regions of the known world."){record_delimiter}
-("entity"{tuple_delimiter}"Second Century CE"{tuple_delimiter}"date"{tuple_delimiter}"Time period of the Christian Era when the Roman Empire was at its height."){record_delimiter}
-("entity"{tuple_delimiter}"Rome"{tuple_delimiter}"location"{tuple_delimiter}"The capital and heart of the Roman Empire."){record_delimiter}
-("entity"{tuple_delimiter}"Roman Senate"{tuple_delimiter}"organization"{tuple_delimiter}"Legislative body that appeared to hold sovereign authority in Rome."){record_delimiter}
-("entity"{tuple_delimiter}"Nerva"{tuple_delimiter}"person"{tuple_delimiter}"Roman emperor who contributed to the public administration during a prosperous period."){record_delimiter}
-("entity"{tuple_delimiter}"Trajan"{tuple_delimiter}"person"{tuple_delimiter}"Roman emperor known for his virtue and administrative abilities."){record_delimiter}
-("entity"{tuple_delimiter}"Hadrian"{tuple_delimiter}"person"{tuple_delimiter}"Roman emperor who governed during the empire's peaceful period."){record_delimiter}
-("entity"{tuple_delimiter}"Antonines"{tuple_delimiter}"person"{tuple_delimiter}"Two Roman emperors who ruled during a period of prosperity and good governance."){record_delimiter}
-("entity"{tuple_delimiter}"Roman Law"{tuple_delimiter}"concept"{tuple_delimiter}"System of laws and manners that unified the provinces of the Roman Empire."){record_delimiter}
-("relationship"{tuple_delimiter}"Roman Empire"{tuple_delimiter}"Roman Law"{tuple_delimiter}"The empire was unified and maintained through the influence of its laws and customs."){record_delimiter}
-("relationship"{tuple_delimiter}"Roman Senate"{tuple_delimiter}"Roman Empire"{tuple_delimiter}"The Senate appeared to possess sovereign authority while delegating executive powers to emperors."){record_delimiter}
-("relationship"{tuple_delimiter}"Nerva"{tuple_delimiter}"Roman Empire"{tuple_delimiter}"Nerva was one of the emperors who contributed to the empire's successful administration."){record_delimiter}
-("relationship"{tuple_delimiter}"Trajan"{tuple_delimiter}"Roman Empire"{tuple_delimiter}"Trajan was one of the emperors who governed during the empire's prosperous period."){record_delimiter}
-("relationship"{tuple_delimiter}"Hadrian"{tuple_delimiter}"Roman Empire"{tuple_delimiter}"Hadrian was one of the emperors who managed the empire's administration effectively."){record_delimiter}
-("relationship"{tuple_delimiter}"Antonines"{tuple_delimiter}"Roman Empire"{tuple_delimiter}"The Antonines were emperors who helped maintain the empire's prosperity through their governance."){record_delimiter}
-("content_keywords"{tuple_delimiter}"Roman governance, imperial prosperity, law and order, civilized society"){completion_delimiter}
-
--Example 2-
-Text:
-#############
-Overall, the analysis of the OsDT11 sequence demonstrated that this protein belongs to the CRP family. Since OsDT11 is predicted to be a secreted protein, the subcellular localization of OsDT11 was determined by fusing the OsDT11 ORF to RFP in a p35S::RFP vector by in vivo protein targeting in NB epidermal cells by performing an Agrobacterium tumefaciens-mediated transient assay. After incubation for 48 h, the RFP signals were mainly detected in the cell-wall of OsDT11-RFP transformed cells, while the control cells (transformed with the RFP construct) displayed ubiquitous RFP signals, demonstrating that OsDT11 is a secreted signal peptide. Moreover, when the infiltrated leaf sections were plasmolyzed, the OsDT11-RFP fusion proteins were located on the cell wall.
-#############
-Output:
-("entity"{tuple_delimiter}"OsDT11"{tuple_delimiter}"gene"{tuple_delimiter}"A protein sequence belonging to the CRP family, demonstrated to be a secreted signal peptide that localizes to cell walls."){record_delimiter}
-("entity"{tuple_delimiter}"CRP family"{tuple_delimiter}"science"{tuple_delimiter}"A protein family to which OsDT11 belongs, characterized by specific structural and functional properties."){record_delimiter}
-("entity"{tuple_delimiter}"RFP"{tuple_delimiter}"technology"{tuple_delimiter}"Red Fluorescent Protein, used as a fusion marker to track protein localization in cells."){record_delimiter}
-("entity"{tuple_delimiter}"p35S::RFP vector"{tuple_delimiter}"technology"{tuple_delimiter}"A genetic construct used for protein expression and visualization studies, containing the 35S promoter and RFP marker."){record_delimiter}
-("entity"{tuple_delimiter}"NB epidermal cells"{tuple_delimiter}"nature"{tuple_delimiter}"Plant epidermal cells used as the experimental system for protein localization studies."){record_delimiter}
-("entity"{tuple_delimiter}"Agrobacterium tumefaciens"{tuple_delimiter}"nature"{tuple_delimiter}"A bacteria species used for transferring genetic material into plant cells in laboratory experiments."){record_delimiter}
-("relationship"{tuple_delimiter}"OsDT11"{tuple_delimiter}"CRP family"{tuple_delimiter}"OsDT11 is identified as a member of the CRP family through sequence analysis."){record_delimiter}
-("relationship"{tuple_delimiter}"OsDT11"{tuple_delimiter}"RFP"{tuple_delimiter}"OsDT11 was fused to RFP to study its cellular localization."){record_delimiter}
-("relationship"{tuple_delimiter}"Agrobacterium tumefaciens"{tuple_delimiter}"NB epidermal cells"{tuple_delimiter}"Agrobacterium tumefaciens was used to transfer genetic material into NB epidermal cells through a transient assay."){record_delimiter}
-("relationship"{tuple_delimiter}"OsDT11"{tuple_delimiter}"NB epidermal cells"{tuple_delimiter}"OsDT11's subcellular localization was studied in NB epidermal cells, showing cell wall targeting."){record_delimiter}
-("content_keywords"{tuple_delimiter}"protein localization, gene expression, cellular biology, molecular techniques"){completion_delimiter}
+("entity"{tuple_delimiter}"BlueSmacking"{tuple_delimiter}"attack_pattern"{tuple_delimiter}"An attack that uses Bluetooth flooding to transfer large packets over the L2CAP protocol."){record_delimiter}
+("entity"{tuple_delimiter}"Bluetooth Flooding"{tuple_delimiter}"attack_technique"{tuple_delimiter}"A technique involving the transfer of large packets to overwhelm a target."){record_delimiter}
+("entity"{tuple_delimiter}"Bluetooth Enabled Devices"{tuple_delimiter}"concept"{tuple_delimiter}"The target of the BlueSmacking attack."){record_delimiter}
+("entity"{tuple_delimiter}"L2CAP Protocol"{tuple_delimiter}"concept"{tuple_delimiter}"The protocol abused during a BlueSmacking attack."){record_delimiter}
+("entity"{tuple_delimiter}"Denial of Service (DoS)"{tuple_delimiter}"concept"{tuple_delimiter}"The ultimate goal of the BlueSmacking attack."){record_delimiter}
+("entity"{tuple_delimiter}"Disable Bluetooth"{tuple_delimiter}"mitigation"{tuple_delimiter}"A tactical defense strategy to stop the attack."){record_delimiter}
+("relationship"{tuple_delimiter}"BlueSmacking"{tuple_delimiter}"Bluetooth Flooding"{tuple_delimiter}"BlueSmacking is executed by using the Bluetooth Flooding technique."){record_delimiter}
+("relationship"{tuple_delimiter}"BlueSmacking"{tuple_delimiter}"L2CAP Protocol"{tuple_delimiter}"The attack abuses the L2CAP protocol to transfer packets."){record_delimiter}
+("relationship"{tuple_delimiter}"BlueSmacking"{tuple_delimiter}"Denial of Service (DoS)"{tuple_delimiter}"The goal of the attack is to cause a DoS."){record_delimiter}
+("relationship"{tuple_delimiter}"Disable Bluetooth"{tuple_delimiter}"BlueSmacking"{tuple_delimiter}"Disabling Bluetooth mitigates the attack."){record_delimiter}
+("content_keywords"{tuple_delimiter}"Bluetooth security, DoS attacks, L2CAP, mitigation"){completion_delimiter}
 
 ################
 -Real Data-
@@ -148,7 +127,7 @@ TEMPLATE_ZH: str = """你是一个NLP专家，擅长分析文本提取命名实�
 ("entity"{tuple_delimiter}"汪二镇"{tuple_delimiter}"location"{tuple_delimiter}"汪二镇是铅山县的一个镇，2016-2017年在此进行了黄华占水稻的示范种植。"){record_delimiter}
 ("entity"{tuple_delimiter}"火田村"{tuple_delimiter}"location"{tuple_delimiter}"火田村是汪二镇的一个村庄，2016-2017年在此进行了黄华占水稻的试验示范种植。"){record_delimiter}
 ("entity"{tuple_delimiter}"广东省农业科学院水稻研究所"{tuple_delimiter}"organization"{tuple_delimiter}"广东省农业科学院水稻研究所是中国的一个科研机构，负责黄华占水稻的选育工作。"){record_delimiter}
-("entity"{tuple_delimiter}"黄新占/丰华占"{tuple_delimiter}"work"{tuple_delimiter}"黄新占和丰华占是黄华占水稻的亲本，用于选育黄华占。"){record_delimiter}
+("entity"{tuple_delimiter}"黄新占/丰华占"{tuple_delimiter}"work"{tuple_delimiter}"黄新占和丰华占是黄华占水稻的亲本，用于选育黄华占. "){record_delimiter}
 ("entity"{tuple_delimiter}"粤、湘、鄂、浙、桂、琼等省"{tuple_delimiter}"location"{tuple_delimiter}"这些省份通过了黄华占水稻的审定，表明该品种在这些地区具有良好的适应性和推广潜力。"){record_delimiter}
 ("entity"{tuple_delimiter}"高产栽培技术"{tuple_delimiter}"technology"{tuple_delimiter}"高产栽培技术是指为了提高黄华占水稻产量而采用的一系列农业技术措施。"){record_delimiter}
 ("entity"{tuple_delimiter}"稳产、优质、增效"{tuple_delimiter}"concept"{tuple_delimiter}"这是铅山县粮食生产的主要目标，强调了粮食生产的稳定、质量和效益。"){record_delimiter}
@@ -165,7 +144,7 @@ TEMPLATE_ZH: str = """你是一个NLP专家，擅长分析文本提取命名实�
 ("relationship"{tuple_delimiter}"黄华占"{tuple_delimiter}"高产栽培技术"{tuple_delimiter}"高产栽培技术是为了提高黄华占水稻产量而开发的技术措施。"){record_delimiter}
 ("relationship"{tuple_delimiter}"铅山县"{tuple_delimiter}"稳产、优质、增效"{tuple_delimiter}"铅山县的粮食生产目标是稳产、优质、增效，这些目标指导了黄华占的示范种植。"){record_delimiter}
 ("relationship"{tuple_delimiter}"铅山县"{tuple_delimiter}"优质稻推广"{tuple_delimiter}"铅山县实施了优质稻推广计划，黄华占是该计划的一部分。"){record_delimiter}
-("relationship"{tuple_delimiter}"杂交水稻技术"{tuple_delimiter}"北涨看长粒香、南涨看黄华占"{tuple_delimiter}"杂交水稻技术的发展使得黄华占等优质稻品种在市场中受到关注。"){record_delimiter}
+("relationship"{tuple_delimiter}"杂交水稻技术"{tuple_delimiter}"北涨看长粒香、南涨看黄华占"{tuple_delimiter}"杂交水rior 稻技术的发展使得黄华占等优质稻品种在市场中受到关注。"){record_delimiter}
 ("content_keywords"{tuple_delimiter}"黄华占, 水稻种植, 高产栽培技术, 优质稻推广, 地区适应性, 市场趋势, 技术影响"){completion_delimiter}
 
 -真实数据-
@@ -202,7 +181,6 @@ KG_EXTRACTION_PROMPT: dict = {
         "tuple_delimiter": "<|>",
         "record_delimiter": "##",
         "completion_delimiter": "<|COMPLETE|>",
-        "entity_types": "concept, date, location, keyword, organization, person, event, work, nature, artificial, \
-science, technology, mission, gene",
+        "entity_types": "attack_pattern, attack_technique, mitigation, vulnerability, weakness, threat_actor, tool_or_malware, concept",
     },
 }

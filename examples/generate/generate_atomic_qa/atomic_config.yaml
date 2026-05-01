@@ -26,11 +26,11 @@ nodes:
   - id: build_kg
     op_name: build_kg
     type: map_batch
+    dependencies:
+      - chunk
     execution_params:
       replicas: 1
       batch_size: 128
-    dependencies:
-      - chunk
 
   - id: partition
     op_name: partition

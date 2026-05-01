@@ -12,6 +12,7 @@ from graphgen.models import (
     DFSPartitioner,
     ECEPartitioner,
     LeidenPartitioner,
+    OverlappingDFSPartitioner,
     Tokenizer,
 )
 from graphgen.utils import logger
@@ -74,6 +75,9 @@ class PartitionService(BaseOperator):
                 if method_params.get("anchor_ids")
                 else None,
             )
+        elif method == "overlapping_dfs":
+            logger.info("Partitioning knowledge graph using Overlapping DFS method.")
+            partitioner = OverlappingDFSPartitioner()
         else:
             raise ValueError(f"Unsupported partition method: {method}")
 

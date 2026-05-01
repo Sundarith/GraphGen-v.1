@@ -14,9 +14,11 @@ class AtomicGenerator(BaseGenerator):
         nodes, edges = batch
         context = ""
         for node in nodes:
-            context += f"- {node[0]}: {node[1]['description']}\n"
+            desc = node[1].get('description') or node[1].get('content') or str(node[1])
+            context += f"- {node[0]}: {desc}\n"
         for edge in edges:
-            context += f"- {edge[0]} - {edge[1]}: {edge[2]['description']}\n"
+            rel_desc = edge[2].get('description') or edge[2].get('content') or str(edge[2])
+            context += f"- {edge[0]} - {edge[1]}: {rel_desc}\n"
         language = detect_main_language(context)
 
         prompt = ATOMIC_GENERATION_PROMPT[language].format(context=context)
@@ -25,28 +27,36 @@ class AtomicGenerator(BaseGenerator):
     @staticmethod
     def parse_response(response: str) -> dict:
         """
-        AtomicGenerator normally generates one QA pair per response.
-        So we just need to parse one QA pair from the response.
-        :param response:
-        :return:
+        Parse response to extract multiple QA pairs.
+        Expected format:
+        <question>Q1</question>
+        <answer>A1</answer>
+        <question>Q2</question>
+        <answer>A2</answer>
+        ...
         """
-        question_match = re.search(r"<question>(.*?)</question>", response, re.DOTALL)
-        answer_match = re.search(r"<answer>(.*?)</answer>", response, re.DOTALL)
+        qa_pairs = {}
+        
+        # Find all questions and answers
+        questions = re.findall(r"<question>(.*?)</question>", response, re.DOTALL)
+        answers = re.findall(r"<answer>(.*?)</answer>", response, re.DOTALL)
 
-        if question_match and answer_match:
-            question = question_match.group(1).strip()
-            answer = answer_match.group(1).strip()
-        else:
+        if not questions or not answers:
             logger.warning("Failed to parse response: %s", response)
             return {}
 
-        question = question.strip('"').strip("'")
-        answer = answer.strip('"').strip("'")
-        logger.debug("Question: %s", question)
-        logger.debug("Answer: %s", answer)
-        return {
-            compute_content_hash(question): {
+        # Pair them up (assuming sequential order)
+        for i, (q, a) in enumerate(zip(questions, answers)):
+            question = q.strip().strip('"').strip("'")
+            answer = a.strip().strip('"').strip("'")
+            
+            logger.debug("Question %d: %s", i+1, question)
+            logger.debug("Answer %d: %s", i+1, answer)
+            
+            # Use unique hash for each pair
+            qa_pairs[compute_content_hash(question)] = {
                 "question": question,
                 "answer": answer,
             }
-        }
+            
+        return qa_pairs

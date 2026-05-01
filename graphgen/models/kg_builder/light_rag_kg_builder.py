@@ -63,6 +63,7 @@ class LightRAGKGBuilder(BaseKGBuilder):
             final_result += glean_result
 
         # step 4: parse the final result
+        print(f"\n\n=== GEMINI EXTRACTION RESULT ===\n{final_result}\n=================================\n\n")
         records = split_string_by_multi_markers(
             final_result,
             [

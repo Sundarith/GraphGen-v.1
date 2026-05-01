@@ -1,58 +1,21 @@
-# Handoff Report: UCKG Knowledge Graph & LLM Training Strategy
+# UCKG Synthetic Data Pipeline: Progress Report
 
-**Date:** 2026-02-02
-**Project:** Unified Cybersecurity Knowledge Graph (UCKG)
-**Goal:** Train an LLM to act as a Cybersecurity Incident Responder.
+## 1. Goal & Context
+The objective was to integrate a highly scalable Supervised Fine-Tuning (SFT) synthetic data generation pipeline directly into the UCKG repository. This replaces the legacy, manual Ground Truth generation scripts previously used by the team, moving from a manual proof-of-concept to a production-grade automated pipeline.
 
-## 1. Current Status
-We have successfully analyzed the Neo4j database structure, data quality, and connectivity.
+## 2. The Automated ETL Pipeline (`run_etl_pipeline.sh`)
+We successfully built and deployed Phase 1 of the architecture. This automated script replaces manual database querying by executing four steps:
 
-*   **Database:** Neo4j (running in Docker `uckg--neo4j-1`).
-*   **Data Health:**
-    *   **Nodes:** ~828k nodes (CVE, CPE, CAPEC, CWE, ATT&CK).
-    *   **Connectivity:** The graph is **fully connected** in a logical chain:
-        `CPE` (Software) -> `CVE` (Vuln) -> `ObservedExample` -> `CWE` (Weakness) -> `CAPEC` (Attack Pattern) -> `ATT&CK` (Tactic).
-    *   **Issue:** Some direct relationships (e.g., `CWE` -> `CAPEC`) are missing in the direct sense but are connected via the long chain or strictly as text properties due to RML mapping issues (see `mapping/DEBUG_RML_CONNECTIONS.md`).
+1.  **Extract:** Automatically pulls complete "Incident Response Triads" (`[CAPEC] -> [ATT&CK] <- [MITIGATION]`) directly from the live Neo4j database.
+2.  **Filter:** Strips unnecessary system properties to optimize the downstream LLM context window.
+3.  **Clean:** Parses nested stringified JSON arrays into readable Markdown bullet points.
+4.  **Load & Separate (The "Clean Graph" Strategy):** We initialize a highly-optimized local `KuzuDB` staging database. Crucially, we shifted from a "Fat Node" approach to a **Clean Topological Graph**. We keep the CAPEC, ATT&CK, and MITIGATION nodes structurally distinct and connect them via explicitly defined relationships (`IS_A`, `MITIGATES`). This strictly enables complex **Multi-Hop Reasoning** for the LLM during generation.
 
-## 2. LLM Training Strategy
-We agreed to build a **User-Centric Incident Responder Bot**.
-The training data extraction will focus on translation: **User Language (Symptoms) -> Technical Reality (Attack Pattern).**
+## 3. Current Status & Results
+*   **Data Staged:** The ETL pipeline successfully extracted **644 complete paths** spanning **559 unique CAPEC nodes**. 
+*   **Visualized:** We built a custom diagnostic tool (`visualize_kuzu.py`) that successfully mapped the staged KuzuDB data, proving the topological connections are intact and ready for traversal.
+*   **Deployed:** The ETL pipeline, custom scripts, and the `sft_engine` have been successfully committed and pushed to the remote `qa-engine` branch.
+*   **Data Integrity:** A strict `.gitignore` was implemented to ensure the massive KuzuDB staging area and intermediate JSONL data files are never accidentally pushed to the remote repository.
 
-### Primary Data Source: **CAPEC (UcoexCAPEC)**
-CAPEC is the "Goldilocks" node—not too technical (like CVE), not too abstract (like ATT&CK). It maps perfectly to user actions.
-
-| Data Field | Purpose | Prompt Strategy |
-| :--- | :--- | :--- |
-| **`ucoexDescription`** | **Primary Source** | "I am worried about [Description Keywords]. What attack is this?" |
-| **`ucoexExample`** | **Scenario Validation** | "Here is a story: [Example Text]. What attack happened?" |
-| **`ucoexExecutionFlowTechnique`** | **Technical Verification** | "How does the [Attack Name] actually work step-by-step?" |
-
-### Secondary Data Source: **Mitigations (UcoexMITIGATIONS)**
-Linked via: `(CAPEC) -> (ATT&CK) <- (Mitigation)`
-*   **Purpose:** The "Answer" to the user's problem.
-*   **Prompt Strategy:** "How do I stop [Attack Name]?" -> [List of Mitigations]
-
-## 3. Work Completed
-*   Verified the graph path: `CPE -> CVE -> ObservedExample -> CWE -> CAPEC -> ATT&CK`.
-*   Verified data quality for `ucoexDescription` and `ucoexExample` (Excellent/Rich text).
-*   Verified relationship names (e.g., `UCOEXMITIGATES` instead of `MITIGATES`).
-*   Designed the Python extraction logic (but did not run it yet).
-
-## 4. Next Steps (For the Next Agent)
-1.  **Run the Extraction Script:** Create and run `extract_capec_training_data.py`.
-    *   *Goal:* Generate `capec_user_intent.jsonl`.
-    *   *Logic:* Iterate `UcoexCAPEC`, extract `Description` and `Example`, format as User Q&A.
-2.  **Add Mitigation Data:** Extend the script to join with `UcoexMITIGATIONS`.
-    *   *Goal:* Add the "Solution" part to the training data.
-3.  **Refine Prompts:** (Optional) Use an LLM to paraphrase the formal CAPEC descriptions into casual "User Complaints" for better realism.
-
-## 5. Key Cypher Queries Identified
-*   **User Intent Data:**
-    ```cypher
-    MATCH (n:UcoexCAPEC) RETURN n.ucoexCAPEC_name, n.ucoexDescription, n.ucoexExample
-    ```
-*   **Full Context (Attack + Defense):**
-    ```cypher
-    MATCH (capec:UcoexCAPEC)-[:UCOEXHASTAXONOMYMAPPING]->(attack:UcoexMITREATTACK)<-[:UCOEXMITIGATES]-(mitigation:UcoexMITIGATIONS)
-    RETURN capec.ucoexCAPEC_name, capec.ucoexDescription, collect(mitigation.ucoexNAME)
-    ```
+## 4. Next Steps
+With the data successfully separated and staged in KuzuDB, the next phase is to build the **Generation Pipeline** (`run_generation.sh`). This script will utilize the `sft_engine` to traverse the database, apply community partitioning algorithms, and generate the final Multi-Hop Q&A pairs for LLM fine-tuning.

@@ -6,40 +6,33 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # Define which properties to KEEP for each node type
-# We use the key prefix to identify the node type in the dictionary or just check common fields
 WHITELIST = {
-    "c": { # CAPEC
-        "ucoexCAPEC_name", 
-        "ucoexDescription", 
-        "ucoexExample", 
-        "ucoexExecutionFlowTechnique", 
-        "ucoexMitigations", 
-        "ucoexPrerequisites",
-        "ucoexSkill_Level",
-        "ucoexConsequences"
-    },
     "a": { # ATT&CK
         "ucoexNAME", 
-        "ucoexDESCRIPTION"
+        "ucoexDESCRIPTION",
+        "ucoexDOMAIN"
     },
     "m": { # MITIGATION
         "ucoexNAME", 
-        "ucoexDESCRIPTION"
+        "ucoexDESCRIPTION",
+        "ucoexDOMAIN"
     }
 }
 
 def filter_dict(d, node_key):
-    """Keep only whitelisted keys from the dictionary."""
+    """Keep only whitelisted keys from the dictionary in a specific order."""
     if not d:
         return {}
-        
+
+    # Manually define order for cleaner output
     filtered = {}
-    allowed_keys = WHITELIST.get(node_key, set())
-    
-    for k, v in d.items():
-        if k in allowed_keys:
-            filtered[k] = v
-            
+    if "ucoexNAME" in d:
+        filtered["ucoexNAME"] = d.get("ucoexNAME")
+    if "ucoexDOMAIN" in d:
+        filtered["ucoexDOMAIN"] = d.get("ucoexDOMAIN")
+    if "ucoexDESCRIPTION" in d:
+        filtered["ucoexDESCRIPTION"] = d.get("ucoexDESCRIPTION")
+
     return filtered
 
 def filter_data(input_file, output_file):
@@ -52,17 +45,13 @@ def filter_data(input_file, output_file):
         for line in fin:
             raw_row = json.loads(line)
             
-            # Apply filter to each node
+            # Apply filter to each node (Attack and Mitigation only)
             filtered_row = {
-                "c": filter_dict(raw_row.get("c"), "c"),
                 "a": filter_dict(raw_row.get("a"), "a"),
                 "m": filter_dict(raw_row.get("m"), "m"),
-                # Keep IDs and relationships as is (they are structural)
-                "r1": raw_row["r1"],
-                "r2": raw_row["r2"],
-                "c_id": raw_row["c_id"],
-                "a_id": raw_row["a_id"],
-                "m_id": raw_row["m_id"]
+                "r": raw_row.get("r"),
+                "a_id": raw_row.get("a_id"),
+                "m_id": raw_row.get("m_id")
             }
             
             fout.write(json.dumps(filtered_row) + "\n")

@@ -1,0 +1,202 @@
+[
+    {
+        "question": "How could BlueSmacking impact devices within close proximity?",
+        "context": "An adversary uses Bluetooth flooding to transfer large packets to Bluetooth enabled devices over the L2CAP protocol with the goal of creating a DoS. This attack must be carried out within close proximity to a Bluetooth enabled device."
+    },
+    {
+        "question": "What is the primary goal of the BlueSmacking attack pattern?",
+        "context": "An adversary uses Bluetooth flooding to transfer large packets to Bluetooth enabled devices over the L2CAP protocol with the goal of creating a DoS. This attack must be carried out within close proximity to a Bluetooth enabled device."
+    },
+    {
+        "question": "Which protocol is utilized in the BlueSmacking attack?",
+        "context": "An adversary uses Bluetooth flooding to transfer large packets to Bluetooth enabled devices over the L2CAP protocol with the goal of creating a DoS. This attack must be carried out within close proximity to a Bluetooth enabled device."
+    },
+    {
+        "question": "What prerequisites are needed to execute the BlueSmacking attack?",
+        "context": "An adversary uses Bluetooth flooding to transfer large packets to Bluetooth enabled devices over the L2CAP protocol with the goal of creating a DoS. This attack must be carried out within close proximity to a Bluetooth enabled device."
+    },
+    {
+        "question": "How does BlueSmacking create a denial-of-service condition?",
+        "context": "An adversary uses Bluetooth flooding to transfer large packets to Bluetooth enabled devices over the L2CAP protocol with the goal of creating a DoS. This attack must be carried out within close proximity to a Bluetooth enabled device."
+    },
+    {
+        "question": "How does the Sniffing Attacks pattern differ from an Adversary-In-The-Middle attack?",
+        "context": "In this attack pattern, the adversary intercepts information transmitted between two third parties. The adversary must be able to observe, read, and/or hear the communication traffic, but not necessarily block the communication or change its content. Any transmission medium can theoretically be sniffed if the adversary can examine the contents between the sender and recipient. Sniffing Attacks are similar to Adversary-In-The-Middle attacks (CAPEC-94), but are entirely passive. AiTM attacks are predominantly active and often alter the content of the communications themselves."
+    },
+    {
+        "question": "What types of communication channels are vulnerable to the Sniffing Attacks pattern?",
+        "context": "In this attack pattern, the adversary intercepts information transmitted between two third parties. The adversary must be able to observe, read, and/or hear the communication traffic, but not necessarily block the communication or change its content. Any transmission medium can theoretically be sniffed if the adversary can examine the contents between the sender and recipient. Sniffing Attacks are similar to Adversary-In-The-Middle attacks (CAPEC-94), but are entirely passive. AiTM attacks are predominantly active and often alter the content of the communications themselves."
+    },
+    {
+        "question": "What skills are needed to execute the Sniffing Attacks pattern?",
+        "context": "In this attack pattern, the adversary intercepts information transmitted between two third parties. The adversary must be able to observe, read, and/or hear the communication traffic, but not necessarily block the communication or change its content. Any transmission medium can theoretically be sniffed if the adversary can examine the contents between the sender and recipient. Sniffing Attacks are similar to Adversary-In-The-Middle attacks (CAPEC-94), but are entirely passive. AiTM attacks are predominantly active and often alter the content of the communications themselves."
+    },
+    {
+        "question": "What resources are typically required to perform Sniffing Attacks?",
+        "context": "In this attack pattern, the adversary intercepts information transmitted between two third parties. The adversary must be able to observe, read, and/or hear the communication traffic, but not necessarily block the communication or change its content. Any transmission medium can theoretically be sniffed if the adversary can examine the contents between the sender and recipient. Sniffing Attacks are similar to Adversary-In-The-Middle attacks (CAPEC-94), but are entirely passive. AiTM attacks are predominantly active and often alter the content of the communications themselves."
+    },
+    {
+        "question": "How could an organization mitigate the risk of Sniffing Attacks?",
+        "context": "In this attack pattern, the adversary intercepts information transmitted between two third parties. The adversary must be able to observe, read, and/or hear the communication traffic, but not necessarily block the communication or change its content. Any transmission medium can theoretically be sniffed if the adversary can examine the contents between the sender and recipient. Sniffing Attacks are similar to Adversary-In-The-Middle attacks (CAPEC-94), but are entirely passive. AiTM attacks are predominantly active and often alter the content of the communications themselves."
+    },
+    {
+        "question": "How could a TCP Flood attack impact service availability?",
+        "context": "An adversary may execute a flooding attack using the TCP protocol with the intent to deny legitimate users access to a service. These attacks exploit the weakness within the TCP protocol where there is some state information for the connection the server needs to maintain. This often involves the use of TCP SYN messages."
+    },
+    {
+        "question": "What TCP protocol weakness does the TCP Flood attack exploit?",
+        "context": "An adversary may execute a flooding attack using the TCP protocol with the intent to deny legitimate users access to a service. These attacks exploit the weakness within the TCP protocol where there is some state information for the connection the server needs to maintain. This often involves the use of TCP SYN messages."
+    },
+    {
+        "question": "What is the purpose of using TCP SYN messages in a TCP Flood attack?",
+        "context": "An adversary may execute a flooding attack using the TCP protocol with the intent to deny legitimate users access to a service. These attacks exploit the weakness within the TCP protocol where there is some state information for the connection the server needs to maintain. This often involves the use of TCP SYN messages."
+    },
+    {
+        "question": "Which skills are likely needed to execute a TCP Flood attack?",
+        "context": "An adversary may execute a flooding attack using the TCP protocol with the intent to deny legitimate users access to a service. These attacks exploit the weakness within the TCP protocol where there is some state information for the connection the server needs to maintain. This often involves the use of TCP SYN messages."
+    },
+    {
+        "question": "What resources might be required to successfully launch a TCP Flood attack?",
+        "context": "An adversary may execute a flooding attack using the TCP protocol with the intent to deny legitimate users access to a service. These attacks exploit the weakness within the TCP protocol where there is some state information for the connection the server needs to maintain. This often involves the use of TCP SYN messages."
+    },
+    {
+        "question": "How could Cross Site Tracing be exploited to steal credentials?",
+        "context": "Cross Site Tracing (XST) enables an adversary to steal the victim's session cookie and possibly other authentication credentials transmitted in the header of the HTTP request when the victim's browser communicates to a destination system's web server."
+    },
+    {
+        "question": "What authentication credentials does Cross Site Tracing potentially compromise?",
+        "context": "Cross Site Tracing (XST) enables an adversary to steal the victim's session cookie and possibly other authentication credentials transmitted in the header of the HTTP request when the victim's browser communicates to a destination system's web server."
+    },
+    {
+        "question": "What conditions enable an adversary to use Cross Site Tracing?",
+        "context": "Cross Site Tracing (XST) enables an adversary to steal the victim's session cookie and possibly other authentication credentials transmitted in the header of the HTTP request when the victim's browser communicates to a destination system's web server."
+    },
+    {
+        "question": "What is the primary function of the Cross Site Tracing attack pattern?",
+        "context": "Cross Site Tracing (XST) enables an adversary to steal the victim's session cookie and possibly other authentication credentials transmitted in the header of the HTTP request when the victim's browser communicates to a destination system's web server."
+    },
+    {
+        "question": "How does Cross Site Tracing impact HTTP request headers?",
+        "context": "Cross Site Tracing (XST) enables an adversary to steal the victim's session cookie and possibly other authentication credentials transmitted in the header of the HTTP request when the victim's browser communicates to a destination system's web server."
+    },
+    {
+        "question": "How could an application be tricked by the Adding a Space to a File Extension attack pattern?",
+        "context": "An adversary adds a space character to the end of a file extension and takes advantage of an application that does not properly neutralize trailing special elements in file names. This extra space, which can be difficult for a user to notice, affects which default application is used to operate on the file and can be leveraged by the adversary to control execution."
+    },
+    {
+        "question": "What factors make the Adding a Space to a File Extension attack pattern difficult to detect?",
+        "context": "An adversary adds a space character to the end of a file extension and takes advantage of an application that does not properly neutralize trailing special elements in file names. This extra space, which can be difficult for a user to notice, affects which default application is used to operate on the file and can be leveraged by the adversary to control execution."
+    },
+    {
+        "question": "Which application behaviors allow the Adding a Space to a File Extension attack pattern to succeed?",
+        "context": "An adversary adds a space character to the end of a file extension and takes advantage of an application that does not properly neutralize trailing special elements in file names. This extra space, which can be difficult for a user to notice, affects which default application is used to operate on the file and can be leveraged by the adversary to control execution."
+    },
+    {
+        "question": "How does the Adding a Space to a File Extension attack pattern affect file execution?",
+        "context": "An adversary adds a space character to the end of a file extension and takes advantage of an application that does not properly neutralize trailing special elements in file names. This extra space, which can be difficult for a user to notice, affects which default application is used to operate on the file and can be leveraged by the adversary to control execution."
+    },
+    {
+        "question": "What are the potential consequences of the Adding a Space to a File Extension attack pattern?",
+        "context": "An adversary adds a space character to the end of a file extension and takes advantage of an application that does not properly neutralize trailing special elements in file names. This extra space, which can be difficult for a user to notice, affects which default application is used to operate on the file and can be leveraged by the adversary to control execution."
+    },
+    {
+        "question": "How could XSS Targeting Error Pages be exploited in a web application?",
+        "context": "An adversary distributes a link (or possibly some other query structure) with a request to a third party web server that is malformed and also contains a block of exploit code in order to have the exploit become live code in the resulting error page."
+    },
+    {
+        "question": "What prerequisites are necessary for XSS Targeting Error Pages to succeed?",
+        "context": "An adversary distributes a link (or possibly some other query structure) with a request to a third party web server that is malformed and also contains a block of exploit code in order to have the exploit become live code in the resulting error page."
+    },
+    {
+        "question": "Which skills would an attacker need to successfully use XSS Targeting Error Pages?",
+        "context": "An adversary distributes a link (or possibly some other query structure) with a request to a third party web server that is malformed and also contains a block of exploit code in order to have the exploit become live code in the resulting error page."
+    },
+    {
+        "question": "What resources are typically required to execute XSS Targeting Error Pages?",
+        "context": "An adversary distributes a link (or possibly some other query structure) with a request to a third party web server that is malformed and also contains a block of exploit code in order to have the exploit become live code in the resulting error page."
+    },
+    {
+        "question": "How does XSS Targeting Error Pages relate to other attack patterns?",
+        "context": "An adversary distributes a link (or possibly some other query structure) with a request to a third party web server that is malformed and also contains a block of exploit code in order to have the exploit become live code in the resulting error page."
+    },
+    {
+        "question": "How could an adversary exploit Lifting Sensitive Data Embedded in Cache?",
+        "context": "An adversary examines a target application's cache, or a browser cache, for sensitive information. Many applications that communicate with remote entities or which perform intensive calculations utilize caches to improve efficiency. However, if the application computes or receives sensitive information and the cache is not appropriately protected, an attacker can browse the cache and retrieve this information. This can result in the disclosure of sensitive information."
+    },
+    {
+        "question": "What application characteristics make Lifting Sensitive Data Embedded in Cache possible?",
+        "context": "An adversary examines a target application's cache, or a browser cache, for sensitive information. Many applications that communicate with remote entities or which perform intensive calculations utilize caches to improve efficiency. However, if the application computes or receives sensitive information and the cache is not appropriately protected, an attacker can browse the cache and retrieve this information. This can result in the disclosure of sensitive information."
+    },
+    {
+        "question": "Which factors contribute to the effectiveness of Lifting Sensitive Data Embedded in Cache?",
+        "context": "An adversary examines a target application's cache, or a browser cache, for sensitive information. Many applications that communicate with remote entities or which perform intensive calculations utilize caches to improve efficiency. However, if the application computes or receives sensitive information and the cache is not appropriately protected, an attacker can browse the cache and retrieve this information. This can result in the disclosure of sensitive information."
+    },
+    {
+        "question": "What kind of information can be exposed by Lifting Sensitive Data Embedded in Cache?",
+        "context": "An adversary examines a target application's cache, or a browser cache, for sensitive information. Many applications that communicate with remote entities or which perform intensive calculations utilize caches to improve efficiency. However, if the application computes or receives sensitive information and the cache is not appropriately protected, an attacker can browse the cache and retrieve this information. This can result in the disclosure of sensitive information."
+    },
+    {
+        "question": "How does the application's caching strategy affect the risk of Lifting Sensitive Data Embedded in Cache?",
+        "context": "An adversary examines a target application's cache, or a browser cache, for sensitive information. Many applications that communicate with remote entities or which perform intensive calculations utilize caches to improve efficiency. However, if the application computes or receives sensitive information and the cache is not appropriately protected, an attacker can browse the cache and retrieve this information. This can result in the disclosure of sensitive information."
+    },
+    {
+        "question": "How could Application API Message Manipulation via Man-in-the-Middle impact application privileges?",
+        "context": "An attacker manipulates either egress or ingress data from a client within an application framework in order to change the content of messages. Performing this attack can allow the attacker to gain unauthorized privileges within the application, or conduct attacks such as phishing, deceptive strategies to spread malware, or traditional web-application attacks. The techniques require use of specialized software that allow the attacker to perform adversary-in-the-middle (CAPEC-94) communications between the web browser and the remote system. Despite the use of AiTH software, the attack is actually directed at the server, as the client is one node in a series of content brokers that pass information along to the application framework. Additionally, it is not true \"Adversary-in-the-Middle\" attack at the network layer, but an application-layer attack the root cause of which is the master applications trust in the integrity of code supplied by the client."
+    },
+    {
+        "question": "What specialized software enables Application API Message Manipulation?",
+        "context": "An attacker manipulates either egress or ingress data from a client within an application framework in order to change the content of messages. Performing this attack can allow the attacker to gain unauthorized privileges within the application, or conduct attacks such as phishing, deceptive strategies to spread malware, or traditional web-application attacks. The techniques require use of specialized software that allow the attacker to perform adversary-in-the-middle (CAPEC-94) communications between the web browser and the remote system. Despite the use of AiTH software, the attack is actually directed at the server, as the client is one node in a series of content brokers that pass information along to the application framework. Additionally, it is not true \"Adversary-in-the-Middle\" attack at the network layer, but an application-layer attack the root cause of which is the master applications trust in the integrity of code supplied by the client."
+    },
+    {
+        "question": "How does Application API Message Manipulation differ from traditional attacks?",
+        "context": "An attacker manipulates either egress or ingress data from a client within an application framework in order to change the content of messages. Performing this attack can allow the attacker to gain unauthorized privileges within the application, or conduct attacks such as phishing, deceptive strategies to spread malware, or traditional web-application attacks. The techniques require use of specialized software that allow the attacker to perform adversary-in-the-middle (CAPEC-94) communications between the web browser and the remote system. Despite the use of AiTH software, the attack is actually directed at the server, as the client is one node in a series of content brokers that pass information along to the application framework. Additionally, it is not true \"Adversary-in-the-Middle\" attack at the network layer, but an application-layer attack the root cause of which is the master applications trust in the integrity of code supplied by the client."
+    },
+    {
+        "question": "What is the primary target of Application API Message Manipulation?",
+        "context": "An attacker manipulates either egress or ingress data from a client within an application framework in order to change the content of messages. Performing this attack can allow the attacker to gain unauthorized privileges within the application, or conduct attacks such as phishing, deceptive strategies to spread malware, or traditional web-application attacks. The techniques require use of specialized software that allow the attacker to perform adversary-in-the-middle (CAPEC-94) communications between the web browser and the remote system. Despite the use of AiTH software, the attack is actually directed at the server, as the client is one node in a series of content brokers that pass information along to the application framework. Additionally, it is not true \"Adversary-in-the-Middle\" attack at the network layer, but an application-layer attack the root cause of which is the master applications trust in the integrity of code supplied by the client."
+    },
+    {
+        "question": "Which factor contributes to Application API Message Manipulation’s success?",
+        "context": "An attacker manipulates either egress or ingress data from a client within an application framework in order to change the content of messages. Performing this attack can allow the attacker to gain unauthorized privileges within the application, or conduct attacks such as phishing, deceptive strategies to spread malware, or traditional web-application attacks. The techniques require use of specialized software that allow the attacker to perform adversary-in-the-middle (CAPEC-94) communications between the web browser and the remote system. Despite the use of AiTH software, the attack is actually directed at the server, as the client is one node in a series of content brokers that pass information along to the application framework. Additionally, it is not true \"Adversary-in-the-Middle\" attack at the network layer, but an application-layer attack the root cause of which is the master applications trust in the integrity of code supplied by the client."
+    },
+    {
+        "question": "How could Counterfeit Hardware Component Inserted During Product Assembly be detected?",
+        "context": "An adversary with either direct access to the product assembly process or to the supply of subcomponents used in the product assembly process introduces counterfeit hardware components into product assembly. The assembly containing the counterfeit components results in a system specifically designed for malicious purposes."
+    },
+    {
+        "question": "What prerequisites enable Counterfeit Hardware Component Inserted During Product Assembly?",
+        "context": "An adversary with either direct access to the product assembly process or to the supply of subcomponents used in the product assembly process introduces counterfeit hardware components into product assembly. The assembly containing the counterfeit components results in a system specifically designed for malicious purposes."
+    },
+    {
+        "question": "Which skills are needed to execute Counterfeit Hardware Component Inserted During Product Assembly?",
+        "context": "An adversary with either direct access to the product assembly process or to the supply of subcomponents used in the product assembly process introduces counterfeit hardware components into product assembly. The assembly containing the counterfeit components results in a system specifically designed for malicious purposes."
+    },
+    {
+        "question": "What consequences could arise from Counterfeit Hardware Component Inserted During Product Assembly?",
+        "context": "An adversary with either direct access to the product assembly process or to the supply of subcomponents used in the product assembly process introduces counterfeit hardware components into product assembly. The assembly containing the counterfeit components results in a system specifically designed for malicious purposes."
+    },
+    {
+        "question": "What techniques are typically used to carry out Counterfeit Hardware Component Inserted During Product Assembly?",
+        "context": "An adversary with either direct access to the product assembly process or to the supply of subcomponents used in the product assembly process introduces counterfeit hardware components into product assembly. The assembly containing the counterfeit components results in a system specifically designed for malicious purposes."
+    },
+    {
+        "question": "How could WebView Exposure be exploited to access application functionality?",
+        "context": "An adversary, through a malicious web page, accesses application specific functionality by leveraging interfaces registered through WebView's addJavascriptInterface API. Once an interface is registered to WebView through addJavascriptInterface, it becomes global and all pages loaded in the WebView can call this interface."
+    },
+    {
+        "question": "What conditions enable WebView Exposure to function?",
+        "context": "An adversary, through a malicious web page, accesses application specific functionality by leveraging interfaces registered through WebView's addJavascriptInterface API. Once an interface is registered to WebView through addJavascriptInterface, it becomes global and all pages loaded in the WebView can call this interface."
+    },
+    {
+        "question": "What skills are required to successfully carry out a WebView Exposure attack?",
+        "context": "An adversary, through a malicious web page, accesses application specific functionality by leveraging interfaces registered through WebView's addJavascriptInterface API. Once an interface is registered to WebView through addJavascriptInterface, it becomes global and all pages loaded in the WebView can call this interface."
+    },
+    {
+        "question": "Which interface API is leveraged in a WebView Exposure attack?",
+        "context": "An adversary, through a malicious web page, accesses application specific functionality by leveraging interfaces registered through WebView's addJavascriptInterface API. Once an interface is registered to WebView through addJavascriptInterface, it becomes global and all pages loaded in the WebView can call this interface."
+    },
+    {
+        "question": "What consequences could result from a successful WebView Exposure attack?",
+        "context": "An adversary, through a malicious web page, accesses application specific functionality by leveraging interfaces registered through WebView's addJavascriptInterface API. Once an interface is registered to WebView through addJavascriptInterface, it becomes global and all pages loaded in the WebView can call this interface."
+    }
+]

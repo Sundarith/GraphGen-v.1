@@ -1,0 +1,26 @@
+global_params:
+  working_dir: cache
+  graph_backend: kuzu
+  kv_backend: rocksdb
+
+nodes:
+  - id: read
+    op_name: read
+    type: source
+    dependencies: []
+    params:
+      input_path:
+        - cache/output/1772815189/partition/partition_cfdba6267ef7413bbc077ff872bd1b55_000000_000000.jsonl
+
+  - id: generate
+    op_name: generate
+    type: map_batch
+    dependencies:
+      - read
+    execution_params:
+      replicas: 1
+      batch_size: 1
+    save_output: true
+    params:
+      method: multi_hop_uckg
+      data_format: Sharegpt

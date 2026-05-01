@@ -1,0 +1,1 @@
+{"type": "text", "content": "# Observed Example Intelligence Report: CWE-404 and CVE-2001-0830\n\n**Executive Summary:**\nThis observed example is described as follows:\nSockets not properly closed when attacker repeatedly connects and disconnects from server.\n\n**Taxonomy & Reference IDs:**\nRelated Weakness (CWE): CWE-404\nRelated Vulnerability (CVE): CVE-2001-0830\n"}

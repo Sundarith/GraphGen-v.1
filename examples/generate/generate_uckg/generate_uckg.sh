@@ -12,10 +12,10 @@ python3 examples/generate/generate_uckg/clean_uckg_data.py
 
 echo "=== Step 4: Load to GraphGen (JSONL -> KuzuDB) ==="
 # OPTION A: Rich Atomic (Bakes Mitigation into CAPEC Description) - BEST FOR ATOMIC QA
-python3 examples/generate/generate_uckg/load_rich_atomic.py --dir cache
+# PYTHONPATH=. python3 examples/generate/generate_uckg/load_rich_atomic.py --dir cache
 
 # OPTION B: Clean Graph (Keeps nodes separate) - BEST FOR MULTI-HOP
-# python3 examples/generate/generate_uckg/load_clean_graph.py --dir cache
+PYTHONPATH=. python3 examples/generate/generate_uckg/load_clean_graph.py --dir cache
 
-echo "=== Step 5: Run GraphGen Pipeline (Atomic Generation) ==="
-python3 -m graphgen.run --config_file examples/generate/generate_uckg/uckg_config.yaml
+# echo "=== Step 5: Run GraphGen Pipeline (Atomic Generation) ==="
+# python3 -m graphgen.run --config_file examples/generate/generate_uckg/uckg_config.yaml

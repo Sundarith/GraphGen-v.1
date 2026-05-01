@@ -72,7 +72,7 @@ class OpenAIClient(BaseLLMWrapper):
         assert self.api_key is not None, f"Please provide api key to access {api_name}."
         if self.backend == "openai_api":
             self.client = AsyncOpenAI(
-                api_key=self.api_key or "dummy", base_url=self.base_url
+                api_key=self.api_key or "dummy", base_url=self.base_url, timeout=3600.0
             )
         elif self.backend == "azure_openai_api":
             assert self.api_version is not None, f"Please provide api_version for {api_name}."

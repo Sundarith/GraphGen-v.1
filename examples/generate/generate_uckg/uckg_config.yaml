@@ -21,7 +21,7 @@ nodes:
     params:
       method: leiden
       method_params:
-        max_size: 50
+        max_size: 10
         use_lcc: false
         random_seed: 42
 
@@ -35,5 +35,5 @@ nodes:
       batch_size: 1
     save_output: true
     params:
-      method: atomic
+      method: multi_hop_uckg
       data_format: Sharegpt

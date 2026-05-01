@@ -30,8 +30,8 @@ class BuildKGService(BaseOperator):
         # consume the chunks and build kg
         nodes, edges = self.build_kg(docs)
         return pd.DataFrame(
-            [{"node": node, "edge": []} for node in nodes]
-            + [{"node": [], "edge": edge} for edge in edges]
+            [{"node": node, "edge": None} for node in nodes]
+            + [{"node": None, "edge": edge} for edge in edges]
         )
 
     def build_kg(self, chunks: List[Chunk]) -> tuple:
